@@ -17,7 +17,7 @@ class CheckStatusRepositoryTest {
     void checkStatusSelfEmployed_NoSelf() throws ResponseException {
         ResponseStatus response = _repository.CheckStatusSelfEmployed(new RequestStatusSimple("7707049388", new Date()));
 
-        assertFalse(response.getStatus());
+        assertFalse(response.isSelfEmployed());
         assertTrue(response.getMessage().contains("не является"));
     }
 

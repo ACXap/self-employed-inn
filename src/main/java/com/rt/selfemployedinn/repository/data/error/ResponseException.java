@@ -1,19 +1,18 @@
 package com.rt.selfemployedinn.repository.data.error;
 
+import lombok.Getter;
+
+@Getter
 public class ResponseException extends Exception{
     public ResponseException(ResponseError errorStatus, Throwable cause) {
         super(cause);
-        _error = errorStatus;
+        error = errorStatus;
     }
 
     public ResponseException(ResponseError errorStatus, String message, Throwable cause) {
         super(message, cause);
-        _error = errorStatus;
+        error = errorStatus;
     }
 
-    private final ResponseError _error;
-
-    public ResponseError getError(){
-        return _error;
-    }
+    private final ResponseError error;
 }

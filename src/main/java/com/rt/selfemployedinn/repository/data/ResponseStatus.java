@@ -1,21 +1,16 @@
 package com.rt.selfemployedinn.repository.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseStatus {
-    public ResponseStatus() {
-    }
-
     @JsonProperty("status")
-    private boolean _status;
+    private boolean isSelfEmployed;
     @JsonProperty("message")
-    private String _message;
-
-    public boolean getStatus() {
-        return _status;
-    }
-
-    public String getMessage() {
-        return _message;
-    }
+    private String message;
 }
