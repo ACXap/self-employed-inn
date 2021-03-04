@@ -17,9 +17,9 @@ public class TaskCheckInn {
     private final Date dataCreate = new Date();
     private final List<String> requestInnCollection;
 
-    public Status status;
-    public Date dateStart;
-    public Date dateStop;
+    private Status status = Status.Stop("Задача еще не запущена");
+    private Date dateStart;
+    private Date dateStop;
     private List<CheckedInn> checkedInCollection;
 
     public void startTask() {
@@ -27,7 +27,8 @@ public class TaskCheckInn {
         dateStart = new Date();
     }
 
-    public void errorTask(String message) {
+    public void errorTask(String message, List<CheckedInn> collection) {
+        checkedInCollection = collection;
         status = Error(message);
         dateStop = new Date();
     }
