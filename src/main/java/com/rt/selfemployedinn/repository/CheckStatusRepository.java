@@ -13,10 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Repository
 public class CheckStatusRepository {
-    public CheckStatusRepository(String url) {
-        this.url = url;
-    }
-
     private final RestTemplate _restTemplate = new RestTemplate();
 
     @Value("${url.service.check.status}")

@@ -31,17 +31,17 @@ class CheckStatusApiServiceTest {
 
     @Test
     void getStatusTask_NoTask() {
-        try{
+        try {
             Status statusTask = api.getStatusTask(UUID.randomUUID().toString());
             fail();
         } catch (Exception e) {
-           assertEquals("Id not found", e.getMessage());
+            assertEquals("Id not found", e.getMessage());
         }
     }
 
     @Test
     void getResultTask_NoTask() {
-        try{
+        try {
             List<CheckedInn> resultTask = api.getResultTask(UUID.randomUUID().toString());
             fail();
         } catch (Exception e) {
@@ -55,11 +55,11 @@ class CheckStatusApiServiceTest {
 
         String taskId = api.addTask(Collections.singletonList("111"));
 
-        while (true){
+        while (true) {
             Thread.sleep(100);
             Status statusTask = api.getStatusTask(taskId);
 
-            if(statusTask.getStatus().equals(StatusType.COMPLETED)) break;
+            if (statusTask.getStatus().equals(StatusType.COMPLETED)) break;
         }
 
         List<CheckedInn> resultTask = api.getResultTask(taskId);
@@ -71,22 +71,22 @@ class CheckStatusApiServiceTest {
 
     @Test
     void getResultTask_NoCompletedTask() throws Exception {
-        Mockito.doAnswer( new AnswersWithDelay(5000, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
+        Mockito.doAnswer(new AnswersWithDelay(2000, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
 
         String taskId = api.addTask(Collections.singletonList("111"));
 
-        while (true){
+        while (true) {
             Status statusTask = api.getStatusTask(taskId);
 
-            if(statusTask.getStatus().equals(StatusType.START)) {
-                try{
+            if (statusTask.getStatus().equals(StatusType.START)) {
+                try {
                     api.getResultTask(taskId);
                     fail();
-                } catch (Exception e){
+                } catch (Exception e) {
                     assertEquals("Task not completed", e.getMessage());
                     break;
                 }
-            } else if(statusTask.getStatus().equals(StatusType.COMPLETED)){
+            } else if (statusTask.getStatus().equals(StatusType.COMPLETED)) {
                 fail();
             }
         }
@@ -94,16 +94,32 @@ class CheckStatusApiServiceTest {
 
     @Test
     void addTask_maxQueue() {
-        Mockito.doAnswer( new AnswersWithDelay(10000, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
+        Mockito.doAnswer(new AnswersWithDelay(10000, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
 
-        try{
-            for(int i = 0;i<12;i++){
+        try {
+            for (int i = 0; i < 12; i++) {
                 String taskId = api.addTask(Collections.singletonList("111"));
             }
             fail();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             assertTrue(ex.getMessage().contains("rejected from java.util.concurrent.ThreadPoolExecutor"));
         }
+    }
 
+    @Test
+    void addTask_OverflowQueue() {
+        Mockito.doAnswer(new AnswersWithDelay(1000, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
+
+        try {
+            for (int i = 0; i < 100; i++) {
+                String taskId = api.addTask(Collections.singletonList("111"));
+                if(i==5) Thread.sleep(1000);
+                Thread.sleep(1000);
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            fail();
+        }
     }
 }

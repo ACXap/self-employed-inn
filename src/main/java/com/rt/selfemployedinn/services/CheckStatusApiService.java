@@ -34,7 +34,7 @@ public class CheckStatusApiService {
         UUID uuid = UUID.randomUUID();
         TaskCheckInn task = new TaskCheckInn(uuid, collectionInn);
         mapTask.put(uuid, task);
-        executor.submit(() -> process(collectionInn, task));
+        executor.execute(() -> process(collectionInn, task));
         return uuid.toString();
     }
 
