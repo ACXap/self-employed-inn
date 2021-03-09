@@ -34,18 +34,13 @@ public class CheckStatusApiService {
         UUID uuid = UUID.randomUUID();
         TaskCheckInn task = new TaskCheckInn(uuid, collectionInn);
         mapTask.put(uuid, task);
-        executor.execute(() -> process(collectionInn, task));
+        executor.execute(() -> process(task));
         return uuid.toString();
     }
 
     public List<CheckedInn> getResultTask(String taskId) throws Exception {
         TaskCheckInn task = getTask(taskId);
-
-        if (task.getStatus().getStatus().equals(StatusType.COMPLETED)) {
-            return task.getCheckedInCollection();
-        }
-
-        throw new Exception("Task not completed");
+        return task.getResult();
     }
 
     public Status getStatusTask(String taskId) throws Exception {
@@ -54,12 +49,12 @@ public class CheckStatusApiService {
     }
 
     //region PrivateMethod
-    private void process(List<String> collectionInn, TaskCheckInn task) {
+    private void process(TaskCheckInn task) {
         List<CheckedInn> result = new ArrayList<>();
 
         task.startTask();
 
-        for (String inn : collectionInn) {
+        for (String inn : task.getRequestInnCollection()) {
             result.add(service.checkInn(inn));
             pauseBetweenRequest();
         }
@@ -90,9 +85,7 @@ public class CheckStatusApiService {
 
     private TaskCheckInn getTask(String id) throws Exception {
         UUID uuid = getId(id);
-        boolean isContains = mapTask.containsKey(uuid);
-
-        if (!isContains) throw new Exception("Id not found");
+        if (!mapTask.containsKey(uuid)) throw new Exception("Id not found");
 
         return mapTask.get(uuid);
     }

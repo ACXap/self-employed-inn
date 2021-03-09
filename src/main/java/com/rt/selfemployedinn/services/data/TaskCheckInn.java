@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static com.rt.selfemployedinn.services.data.Status.Error;
 import static com.rt.selfemployedinn.services.data.Status.Start;
 
 @RequiredArgsConstructor
@@ -27,15 +26,15 @@ public class TaskCheckInn {
         dateStart = new Date();
     }
 
-    public void errorTask(String message, List<CheckedInn> collection) {
-        checkedInCollection = collection;
-        status = Error(message);
-        dateStop = new Date();
-    }
-
     public void stopTask(List<CheckedInn> collection) {
         checkedInCollection = collection;
         status = new Status(StatusType.COMPLETED, new Date(), "Задача завершена");
         dateStop = new Date();
+    }
+
+    public List<CheckedInn> getResult() throws Exception {
+        if (!status.getStatus().equals(StatusType.COMPLETED)) throw new Exception("Task not completed");
+
+        return checkedInCollection;
     }
 }
