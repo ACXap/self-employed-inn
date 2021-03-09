@@ -13,14 +13,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Repository
 public class CheckStatusRepository {
-    private final RestTemplate _restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${url.service.check.status}")
     private String url;
 
     public ResponseStatus CheckStatusSelfEmployed(IStatusRequest request) throws ResponseException {
         try {
-            ResponseEntity<ResponseStatus> statusResponseResponseEntity = _restTemplate.postForEntity(url, request, ResponseStatus.class);
+            ResponseEntity<ResponseStatus> statusResponseResponseEntity = restTemplate.postForEntity(url, request, ResponseStatus.class);
             return statusResponseResponseEntity.getBody();
         } catch (HttpStatusCodeException exception) {
             throw createErrorStatus(exception);

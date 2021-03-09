@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
