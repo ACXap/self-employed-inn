@@ -30,7 +30,7 @@ public class ApiController {
     }
 
     @GetMapping
-    public String apiCheckSinglInn(@RequestParam("inn") String inn) {
+    public String apiCheckSingleInn(@RequestParam("inn") String inn) {
         try {
             String taskId = service.addTask(Collections.singletonList(inn));
             return taskId;
