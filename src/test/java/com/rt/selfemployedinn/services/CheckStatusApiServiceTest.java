@@ -71,7 +71,7 @@ class CheckStatusApiServiceTest {
 
     @Test
     void getResultTask_NoCompletedTask() throws Exception {
-        Mockito.doAnswer(new AnswersWithDelay(2000, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
+        Mockito.doAnswer(new AnswersWithDelay(200, invocationOnMock -> new CheckedInn("111", new Date(), true, ""))).when(serv).checkInn("111");
 
         String taskId = api.addTask(Collections.singletonList("111"));
 

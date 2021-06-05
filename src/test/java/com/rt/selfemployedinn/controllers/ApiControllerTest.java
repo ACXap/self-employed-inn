@@ -20,6 +20,7 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +38,7 @@ class ApiControllerTest {
     void apiCheckInn() throws Exception {
         Mockito.when(service.addTask(ArgumentMatchers.anyList())).thenReturn("taskId");
 
-        mockMvc.perform(get("/api/1.0/check-inn").param("inn", "123321123"))
+        mockMvc.perform(post("/api/1.0/check-inn").content("[\"123321123\"]").contentType("application/json;charset=UTF-8"))
                 .andDo(MockMvcResultHandlers.log())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("text/plain;charset=UTF-8"))
