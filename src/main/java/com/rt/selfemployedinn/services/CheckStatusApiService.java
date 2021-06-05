@@ -39,7 +39,7 @@ public class CheckStatusApiService {
         UUID uuid = UUID.randomUUID();
         TaskCheckInn task = new TaskCheckInn(uuid, collectionInn);
         mapTask.put(uuid, task);
-        executor.execute(() -> process(collectionInn, task));
+        executor.execute(() -> process(task));
         return uuid.toString();
     }
 
@@ -59,12 +59,12 @@ public class CheckStatusApiService {
     }
 
     //region PrivateMethod
-    private void process(List<String> collectionInn, TaskCheckInn task) {
+    private void process(TaskCheckInn task) {
         List<CheckedInn> result = new ArrayList<>();
 
         task.startTask();
 
-        for (String inn : collectionInn) {
+        for (String inn : task.getRequestInnCollection()) {
             pauseBetweenRequest();
             result.add(service.checkInn(inn));
         }
