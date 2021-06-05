@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Array;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,19 +22,9 @@ public class ApiController {
     private final CheckStatusApiService service;
 
     @PostMapping
-    public String apiCheckCollectionInn(List<String> collectionInn) {
+    public String apiCheckCollectionInn(@RequestBody List<String> collectionInn) {
         try {
             String taskId = service.addTask(collectionInn);
-            return taskId;
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
-        }
-    }
-
-    @GetMapping
-    public String apiCheckSingleInn(@RequestParam("inn") String inn) {
-        try {
-            String taskId = service.addTask(Collections.singletonList(inn));
             return taskId;
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);

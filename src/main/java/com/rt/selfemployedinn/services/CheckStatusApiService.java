@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class CheckStatusApiService {
+
+    //region PrivateField
     private final CheckStatusService service;
     private final Map<UUID, TaskCheckInn> mapTask = new HashMap<>();
 
@@ -25,10 +27,13 @@ public class CheckStatusApiService {
     private int maxQueueCheckInn = 10;
 
     @Value("${pause.request}")
-    private int pauseRequest = 30;
+    private long pauseRequest = 30000;
+
+    private long lastTimeRequest = 0;
 
     private final LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(maxQueueCheckInn);
     private final ExecutorService executor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, queue);
+    //endregion PrivateField
 
     public String addTask(List<String> collectionInn) {
         UUID uuid = UUID.randomUUID();
@@ -60,19 +65,25 @@ public class CheckStatusApiService {
         task.startTask();
 
         for (String inn : collectionInn) {
-            result.add(service.checkInn(inn));
             pauseBetweenRequest();
+            result.add(service.checkInn(inn));
         }
 
         task.stopTask(result);
     }
 
-    private void pauseBetweenRequest(){
-        try {
-            TimeUnit.SECONDS.sleep(pauseRequest);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void pauseBetweenRequest() {
+        long delayRequest = new Date().getTime() - lastTimeRequest;
+
+        if (delayRequest < pauseRequest) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(pauseRequest - delayRequest + 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+        lastTimeRequest = new Date().getTime();
     }
 
     @PreDestroy
