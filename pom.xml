@@ -8,10 +8,10 @@
         <version>2.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.rt</groupId>
-    <artifactId>self-employed-inn</artifactId>
+    <groupId>com.rtk.mdm</groupId>
+    <artifactId>mdm-self-employed-inn</artifactId>
     <version>1.0</version>
-    <name>SelfEmployed</name>
+    <name>mdm-self-employed-inn</name>
     <description>Check inn self-employed</description>
     <properties>
         <java.version>1.8</java.version>
