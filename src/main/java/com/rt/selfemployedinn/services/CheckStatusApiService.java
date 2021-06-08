@@ -73,7 +73,7 @@ public class CheckStatusApiService {
     }
 
     private void pauseBetweenRequest() {
-        long delayRequest = new Date().getTime() - lastTimeRequest;
+        long delayRequest = System.currentTimeMillis() - lastTimeRequest;
 
         if (delayRequest < pauseRequest) {
             try {
@@ -83,7 +83,7 @@ public class CheckStatusApiService {
             }
         }
 
-        lastTimeRequest = new Date().getTime();
+        lastTimeRequest = System.currentTimeMillis();
     }
 
     @PreDestroy
